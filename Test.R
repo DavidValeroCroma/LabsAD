@@ -6,6 +6,44 @@ library(ggplot2)
 # Cargar el dataset
 data <- read.csv("wdbc.csv")
 
+# Realizar el Shapiro-Wilk test para cada característica en el grupo benigno y maligno
+
+cat("Shapiro-Wilk test para tumores benignos:\n")
+shapiro_radius_b <- shapiro.test(data$radius1[data$Diagnosis == "B"])
+shapiro_perimeter_b <- shapiro.test(data$perimeter1[data$Diagnosis == "B"])
+shapiro_area_b <- shapiro.test(data$area1[data$Diagnosis == "B"])
+shapiro_concavity_b <- shapiro.test(data$concavity1[data$Diagnosis == "B"])
+shapiro_concave_points_b <- shapiro.test(data$concave_points1[data$Diagnosis == "B"])
+
+cat("\nRadio (Benignos):\n")
+print(shapiro_radius_b)
+cat("\nPerímetro (Benignos):\n")
+print(shapiro_perimeter_b)
+cat("\nÁrea (Benignos):\n")
+print(shapiro_area_b)
+cat("\nConcavidad (Benignos):\n")
+print(shapiro_concavity_b)
+cat("\nPuntos Cóncavos (Benignos):\n")
+print(shapiro_concave_points_b)
+
+cat("\nShapiro-Wilk test para tumores malignos:\n")
+shapiro_radius_m <- shapiro.test(data$radius1[data$Diagnosis == "M"])
+shapiro_perimeter_m <- shapiro.test(data$perimeter1[data$Diagnosis == "M"])
+shapiro_area_m <- shapiro.test(data$area1[data$Diagnosis == "M"])
+shapiro_concavity_m <- shapiro.test(data$concavity1[data$Diagnosis == "M"])
+shapiro_concave_points_m <- shapiro.test(data$concave_points1[data$Diagnosis == "M"])
+
+cat("\nRadio (Malignos):\n")
+print(shapiro_radius_m)
+cat("\nPerímetro (Malignos):\n")
+print(shapiro_perimeter_m)
+cat("\nÁrea (Malignos):\n")
+print(shapiro_area_m)
+cat("\nConcavidad (Malignos):\n")
+print(shapiro_concavity_m)
+cat("\nPuntos Cóncavos (Malignos):\n")
+print(shapiro_concave_points_m)
+
 # Convertir la columna 'Diagnosis' a factor (Benigno: B, Maligno: M)
 data$Diagnosis <- factor(data$Diagnosis, levels = c("B", "M"))
 
@@ -22,25 +60,33 @@ print(mean_benign)
 
 cat("Medias para tumores malignos:\n")
 print(mean_malign)
+#dado que la mayoria de los parametros no sigue una distribucion normal usaremos la prueba U de Mann-Whitney
+# Prueba U para radius1
+cat("Prueba U de Mann-Whitney para tumores benignos y malignos:\n")
+u_test_radius <- wilcox.test(radius1 ~ Diagnosis, data = data)
+cat("\nPrueba U para radius1:\n")
+print(u_test_radius)
 
-# Pruebas t para comparar las medias entre tumores benignos y malignos
-t_radius <- t.test(data$radius1 ~ data$Diagnosis)
-t_perimeter <- t.test(data$perimeter1 ~ data$Diagnosis)
-t_area <- t.test(data$area1 ~ data$Diagnosis)
-t_concavity <- t.test(data$concavity1 ~ data$Diagnosis)
-t_concave_points <- t.test(data$concave_points1 ~ data$Diagnosis)
+# Prueba U para perimeter1
+u_test_perimeter <- wilcox.test(perimeter1 ~ Diagnosis, data = data)
+cat("\nPrueba U para perimeter1:\n")
+print(u_test_perimeter)
 
-# Mostrar resultados de las pruebas t
-cat("\nPrueba t para radius1:\n")
-print(t_radius)
-cat("\nPrueba t para perimeter1:\n")
-print(t_perimeter)
-cat("\nPrueba t para area1:\n")
-print(t_area)
-cat("\nPrueba t para concavity1:\n")
-print(t_concavity)
-cat("\nPrueba t para concave_points1:\n")
-print(t_concave_points)
+# Prueba U para area1
+u_test_area <- wilcox.test(area1 ~ Diagnosis, data = data)
+cat("\nPrueba U para area1:\n")
+print(u_test_area)
+
+# Prueba U para concavity1
+u_test_concavity <- wilcox.test(concavity1 ~ Diagnosis, data = data)
+cat("\nPrueba U para concavity1:\n")
+print(u_test_concavity)
+
+# Prueba U para concave_points1
+u_test_concave_points <- wilcox.test(concave_points1 ~ Diagnosis, data = data)
+cat("\nPrueba U para concave_points1:\n")
+print(u_test_concave_points)
+
 
 # Regresión logística para predecir si un tumor es maligno o benigno
 # Usaremos las características seleccionadas (radius1, perimeter1, area1, concavity1, concave_points1)
@@ -72,3 +118,6 @@ print(confusion_matrix)
 # Cálculo de la precisión
 accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
 cat("\nPrecisión del modelo: ", accuracy, "\n")
+
+
+
