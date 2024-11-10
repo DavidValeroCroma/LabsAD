@@ -27,8 +27,28 @@ dim(respca$rotation)
 
 summary(respca)
 
+# Crear el biplot
+fviz_pca_biplot(respca , 
+                repel = TRUE,            # Evita el solapamiento de etiquetas
+                col.var = "red",         # Color de los eigenvectores
+                col.ind = "blue",        # Color de los puntos de datos
+                geom.ind = "point",      # Representación de los datos como puntos
+                labelsize = 4) +         # Tamaño de etiquetas
+  ggtitle("Biplot de PCA: Datos y Eigenvectores") +
+  theme_minimal()
 
-#########################################################
+#Analisis PREELIMINAR
+
+#Podemos ver que el 91% de los datos se eplican con los primeros 7 PC y los dos primeros explican el 63,24%
+#y al 4to PC mantenemos el 80% de la variacion original.
+#PC1  es negativo para todas las var anteriores
+#PC2 es positivo con los radios, perimetros, area, textura 1 y 3. (Osea medidas que definen el tamano del tumor)
+#y negativo con textura2 concavidad, compactness, smothness, fractal dimension y 
+#symetry; osea todos los datos que definen la forma del tumor
+#PC3: es negativo con todo menos con textura y area 
+#PC4: es positivO con todo menos textura
+
+######################################################### CODIGO ANTERIOR (USAR SOLO DE REFERENCIA)
 #Matriz de covarianza
 matriz_covarianza <- cov(datos_normalizados)
 
@@ -50,7 +70,7 @@ datos_pca <- datos_normalizados %*% eigen_vectores[, 1:num_componentes]
 pca <- prcomp(datos_normalizados, center = TRUE, scale. = TRUE)
 
 # Crear el biplot
-fviz_pca_biplot(pca, 
+fviz_pca_biplot(respca , 
                 repel = TRUE,            # Evita el solapamiento de etiquetas
                 col.var = "red",         # Color de los eigenvectores
                 col.ind = "blue",        # Color de los puntos de datos
