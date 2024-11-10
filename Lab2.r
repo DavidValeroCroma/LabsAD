@@ -25,8 +25,8 @@ head(respca$rotation)[,1:5]
 
 dim(respca$rotation)
 
-summary(respca)
-
+# summary(respca)
+print(summary(respca))
 # Crear el biplot
 fviz_pca_biplot(respca , 
                 repel = TRUE,            # Evita el solapamiento de etiquetas
@@ -84,4 +84,37 @@ fviz_pca_biplot(respca ,
 
 #K-medoids
 
+# Parte 2: Clustering con K-medoids
 
+# Primero, cargamos la librería necesaria
+library(cluster)
+
+# Definir el número de clusters (por ejemplo, 2 o 3 según el análisis de los datos o el objetivo del análisis)
+k <- 2
+
+# Aplicamos el algoritmo K-medoids usando los datos de los componentes principales seleccionados (datos_pca)
+# Utilizamos los primeros componentes principales que capturan el 90% de la varianza
+kmedoids_result <- pam(datos_pca, k = k)
+
+# Visualización de los clusters obtenidos en el espacio de los primeros dos componentes principales
+fviz_cluster(kmedoids_result, data = datos_pca,
+             geom = "point", ellipse.type = "norm", 
+             main = paste("K-medoids Clustering con", k, "Clusters"),
+             ggtheme = theme_minimal())
+
+# Interpretación de resultados
+# Se pueden ver los centros de cada cluster, los miembros de cada cluster y otras métricas.
+# Imprimir información del clustering
+print("Medoids:")
+print(kmedoids_result$medoids)
+print("Objective:")
+print(kmedoids_result$objective)
+# print("Silueta:")
+# silhouette_info <- kmedoids_result$silinfo
+# print(silhouette_info)
+
+#graficar el coeficiente de silueta
+# fviz_silhouette(silhouette_info) + ggtitle("Coeficiente de Silueta")
+
+print("clusinfo: ")
+print(kmedoids_result$clusinfo)
