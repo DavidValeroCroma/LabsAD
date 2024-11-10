@@ -10,11 +10,25 @@ library(ggplot2)
 dataset <- read.csv("wdbc.csv", stringsAsFactors = FALSE)
 
 #Parte 1: Análisis de componentes principales
-#Normalización de datos
+#Normalización de datos y eliminacion de datos numericos 
 
 datos_numericos <- dataset %>% select(-Id, -Diagnosis)
 datos_normalizados <- scale(datos_numericos)
 
+#Aplicacion de pc
+respca <- prcomp(datos_normalizados, scale = TRUE)
+
+#Sacamos info del PC
+names(respca)
+
+head(respca$rotation)[,1:5]
+
+dim(respca$rotation)
+
+summary(respca)
+
+
+#########################################################
 #Matriz de covarianza
 matriz_covarianza <- cov(datos_normalizados)
 
