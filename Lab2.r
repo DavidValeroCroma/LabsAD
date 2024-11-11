@@ -22,11 +22,11 @@ respca <- prcomp(datos_normalizados, scale = TRUE)
 names(respca)
 
 head(respca$rotation)[,1:5]
-
+print(head(respca$rotation)[,1:5])
 dim(respca$rotation)
 
 # summary(respca)
-print(summary(respca))
+summary(respca)
 # Crear el biplot
 fviz_pca_biplot(respca , 
                 repel = TRUE,            # Evita el solapamiento de etiquetas
@@ -80,41 +80,30 @@ fviz_pca_biplot(respca ,
   theme_minimal()
 
 
-#Parte 2: Clustering 
-
-#K-medoids
-
 # Parte 2: Clustering con K-medoids
 
-# Primero, cargamos la librería necesaria
-library(cluster)
+##chatgpt
+# Seleccionar los componentes principales (por ejemplo, los primeros dos componentes)
+pca_scores <- as.data.frame(respca$x[, 1:2])  # Usamos solo los dos primeros PCAs
+pca_scores_numeric <- pca_scores[,1:2]
+print(pca_scores_numeric)
+#Aplicamos el metodo del codo 
+fviz_nbclust(pca_scores_numeric, pam, method = "wss") +
+  ggtitle("Método del Codo para K-medoids")
+# Definir el número de clusters (por ejemplo, 3 clusters)
+num_clusters <- 3
 
-# Definir el número de clusters (por ejemplo, 2 o 3 según el análisis de los datos o el objetivo del análisis)
-k <- 2
-
-# Aplicamos el algoritmo K-medoids usando los datos de los componentes principales seleccionados (datos_pca)
-# Utilizamos los primeros componentes principales que capturan el 90% de la varianza
-kmedoids_result <- pam(datos_pca, k = k)
-
-# Visualización de los clusters obtenidos en el espacio de los primeros dos componentes principales
-fviz_cluster(kmedoids_result, data = datos_pca,
-             geom = "point", ellipse.type = "norm", 
-             main = paste("K-medoids Clustering con", k, "Clusters"),
-             ggtheme = theme_minimal())
-
-# Interpretación de resultados
-# Se pueden ver los centros de cada cluster, los miembros de cada cluster y otras métricas.
-# Imprimir información del clustering
-print("Medoids:")
-print(kmedoids_result$medoids)
-print("Objective:")
-print(kmedoids_result$objective)
-# print("Silueta:")
-# silhouette_info <- kmedoids_result$silinfo
-# print(silhouette_info)
-
-#graficar el coeficiente de silueta
-# fviz_silhouette(silhouette_info) + ggtitle("Coeficiente de Silueta")
-
-print("clusinfo: ")
-print(kmedoids_result$clusinfo)
+# Aplicar el algoritmo de k-medoids
+set.seed(123)  # Para reproducibilidad
+kmedoids_result <- pam(pca_scores_numeric, k = num_clusters) 
+# # Añadir los clusters obtenidos al conjunto de datos de componentes principales
+pca_scores$cluster <- as.factor(kmedoids_result$cluster)
+# # Visualizar los clusters en el espacio PCA
+fviz_cluster(list(data = pca_scores_numeric, cluster = kmedoids_result$cluster),
+             geom = "point",
+             ellipse.type = "norm",
+             show.clust.cent = TRUE,
+             palette = "jco",
+             ggtheme = theme_minimal()) +
+  ggtitle("Clustering de PCA con K-medoids") +
+  theme_minimal()
