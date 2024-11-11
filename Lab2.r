@@ -50,17 +50,8 @@ fviz_pca_biplot(respca ,
   ggtitle("Biplot de PCA: Datos y Eigenvectores") +
   theme_minimal()
 
-#Analisis PREELIMINAR
 
-#Podemos ver que el 91% de los datos se eplican con los primeros 7 PC y los dos primeros explican el 63,24%
-#y al 4to PC mantenemos el 80% de la variacion original.
-#PC1: Es negativo para todas las var previas
-#PC2: 
-#
-#PC3: 
-#PC4:
-
-######################################################### CODIGO ANTERIOR (USAR SOLO DE REFERENCIA)
+######################################################### CODIGO DE ANALISIS
 #Matriz de covarianza
 matriz_covarianza <- cov(datos_normalizados)
 
@@ -68,6 +59,8 @@ matriz_covarianza <- cov(datos_normalizados)
 eigen_result <- eigen(matriz_covarianza)
 eigen_valores <- eigen_result$values
 eigen_vectores <- eigen_result$vectors
+
+print(eigen_vectores)
 
 #Selección de componentes principales
 varianza_acumulada <- cumsum(eigen_valores) / sum(eigen_valores)
@@ -92,6 +85,17 @@ fviz_pca_biplot(respca ,
   theme_minimal()
 
 
+#Analisis PREELIMINAR
+
+#Podemos ver que el 91,625% de los datos se eplican con los primeros 4 PC y los dos primeros explican el 77,55%
+#y al 4to PC mantenemos el 80% de la variacion original.
+#PC1: Es negativo para todas las variables previas
+#PC2: Positivo con area, perimetro, radio. Indiferente con textura puntos concavos, 
+#concavidad. Negativo con suavidad, compacidad, simetria y muy negativo con dimension fractal. 
+#PC3: neutro con todo y  muy negativo con textura. (se define como el antonimo de textura)
+#PC4: neutral con todo menos, positivo con dimension fractal y muy negativo con simetria (se define como el antonimo de simetria)
+
+
 # Parte 2: Clustering con K-medoids
 
 ##chatgpt
@@ -103,7 +107,7 @@ print(pca_scores_numeric)
 fviz_nbclust(pca_scores_numeric, pam, method = "wss") +
   ggtitle("Método del Codo para K-medoids")
 # Definir el número de clusters (por ejemplo, 3 clusters)
-num_clusters <- 3
+num_clusters <- 2
 
 # Aplicar el algoritmo de k-medoids
 set.seed(123)  # Para reproducibilidad
