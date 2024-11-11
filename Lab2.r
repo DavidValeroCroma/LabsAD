@@ -51,7 +51,7 @@ fviz_pca_biplot(respca ,
   theme_minimal()
 
 
-######################################################### CODIGO DE ANALISIS
+######################################################### ANALISIS
 #Matriz de covarianza
 matriz_covarianza <- cov(datos_normalizados)
 
