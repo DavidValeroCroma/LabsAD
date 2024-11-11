@@ -10,10 +10,23 @@ library(ggplot2)
 dataset <- read.csv("wdbc.csv", stringsAsFactors = FALSE)
 
 #Parte 1: Análisis de componentes principales
+
+#Sacamos el prmedio de las mediciones por columnas
+promedios <- data.frame(
+  radio = rowMeans(dataset[, c(3, 13, 23)]),
+  textura = rowMeans(dataset[, c(4, 14, 24)]),
+  perimetro = rowMeans(dataset[, c(5, 15, 25)]),
+  area = rowMeans(dataset[, c(6, 16, 26)]),
+  suavidad = rowMeans(dataset[, c(7, 17, 27)]),
+  compacidad = rowMeans(dataset[, c(8, 18, 28)]),
+  concavidad = rowMeans(dataset[, c(9, 19, 29)]),
+  puntos_concavos = rowMeans(dataset[, c(10, 20, 30)]),
+  simetria = rowMeans(dataset[, c(11, 21, 31)]),
+  dimension_fractal = rowMeans(dataset[, c(12, 22, 32)])
+)
 #Normalización de datos y eliminacion de datos numericos 
 
-datos_numericos <- dataset %>% select(-Id, -Diagnosis)
-datos_normalizados <- scale(datos_numericos)
+datos_normalizados <- scale(promedios)
 
 #Aplicacion de pc
 respca <- prcomp(datos_normalizados, scale = TRUE)
@@ -41,12 +54,11 @@ fviz_pca_biplot(respca ,
 
 #Podemos ver que el 91% de los datos se eplican con los primeros 7 PC y los dos primeros explican el 63,24%
 #y al 4to PC mantenemos el 80% de la variacion original.
-#PC1  es negativo para todas las var anteriores
-#PC2 es positivo con los radios, perimetros, area, textura 1 y 3. (Osea medidas que definen el tamano del tumor)
-#y negativo con textura2 concavidad, compactness, smothness, fractal dimension y 
-#symetry; osea todos los datos que definen la forma del tumor
-#PC3: es negativo con todo menos con textura y area 
-#PC4: es positivO con todo menos textura
+#PC1: Es negativo para todas las var previas
+#PC2: 
+#
+#PC3: 
+#PC4:
 
 ######################################################### CODIGO ANTERIOR (USAR SOLO DE REFERENCIA)
 #Matriz de covarianza
