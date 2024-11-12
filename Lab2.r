@@ -31,6 +31,7 @@ datos_normalizados <- scale(promedios)
 #Aplicacion de pc
 respca <- prcomp(datos_normalizados, scale = TRUE)
 
+
 #Sacamos info del PC
 names(respca)
 
@@ -70,6 +71,7 @@ num_componentes <- which(varianza_acumulada >= 0.9)[1]  # Primer índice que alc
 datos_pca <- datos_normalizados %*% eigen_vectores[, 1:num_componentes]
 
 
+
 #Visualizacion de los eigenvectors en el plano de los primeros 2 PC
 # Realizar PCA
 pca <- prcomp(datos_normalizados, center = TRUE, scale. = TRUE)
@@ -98,11 +100,15 @@ fviz_pca_biplot(respca ,
 
 # Parte 2: Clustering con K-medoids
 
-##chatgpt
+# Agregar la columna de diagnosis al conjunto de datos de promedios
+promedios$Diagnosis <- dataset$Diagnosis
+
 # Seleccionar los componentes principales (por ejemplo, los primeros dos componentes)
 pca_scores <- as.data.frame(respca$x[, 1:2])  # Usamos solo los dos primeros PCAs
+# pca_scores_numeric <- pca_scores[,1:2]
+pca_scores$Diagnosis <- as.factor(promedios$Diagnosis)  # Agregar diagnosis como factor para el color en el gráfico
 pca_scores_numeric <- pca_scores[,1:2]
-print(pca_scores_numeric)
+
 #Aplicamos el metodo del codo 
 fviz_nbclust(pca_scores_numeric, pam, method = "wss") +
   ggtitle("Método del Codo para K-medoids")
@@ -111,15 +117,19 @@ num_clusters <- 2
 
 # Aplicar el algoritmo de k-medoids
 set.seed(123)  # Para reproducibilidad
-kmedoids_result <- pam(pca_scores_numeric, k = num_clusters) 
+kmedoids_result <- pam(pca_scores, k = num_clusters) 
 # # Añadir los clusters obtenidos al conjunto de datos de componentes principales
 pca_scores$cluster <- as.factor(kmedoids_result$cluster)
 # # Visualizar los clusters en el espacio PCA
-fviz_cluster(list(data = pca_scores_numeric, cluster = kmedoids_result$cluster),
-             geom = "point",
-             ellipse.type = "norm",
-             show.clust.cent = TRUE,
-             palette = "jco",
-             ggtheme = theme_minimal()) +
-  ggtitle("Clustering de PCA con K-medoids") +
+
+ggplot(pca_scores, aes(x = PC1, y = PC2, color = Diagnosis, shape = cluster)) +
+  geom_point(size = 3) +
+  scale_color_manual(values = c("blue", "green"), labels = c("Benigno", "Maligno")) +
+  scale_shape_manual(values = c(16, 17)) +  # Diferentes símbolos para cada cluster
+  labs(title = "Biplot de PCA: Clasificación Benigno/Maligno con Clusters",
+       x = "Componente Principal 1",
+       y = "Componente Principal 2",
+       color = "Diagnóstico",
+       shape = "Cluster") +
+  stat_ellipse(aes(group = cluster), type = "norm", linetype = 2) +  # Añade elipses para los clusters
   theme_minimal()
