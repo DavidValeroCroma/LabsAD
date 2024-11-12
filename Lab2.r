@@ -13,16 +13,16 @@ dataset <- read.csv("wdbc.csv", stringsAsFactors = FALSE)
 
 #Sacamos el prmedio de las mediciones por columnas
 promedios <- data.frame(
-  radio = rowMeans(dataset[, c(3, 13, 23)]),
-  textura = rowMeans(dataset[, c(4, 14, 24)]),
-  perimetro = rowMeans(dataset[, c(5, 15, 25)]),
-  area = rowMeans(dataset[, c(6, 16, 26)]),
-  suavidad = rowMeans(dataset[, c(7, 17, 27)]),
-  compacidad = rowMeans(dataset[, c(8, 18, 28)]),
-  concavidad = rowMeans(dataset[, c(9, 19, 29)]),
-  puntos_concavos = rowMeans(dataset[, c(10, 20, 30)]),
-  simetria = rowMeans(dataset[, c(11, 21, 31)]),
-  dimension_fractal = rowMeans(dataset[, c(12, 22, 32)])
+  radio = (dataset[, c(3)]),
+  textura = (dataset[, c(4)]),
+  perimetro = (dataset[, c(5)]),
+  area = (dataset[, c(6)]),
+  suavidad = (dataset[, c(7)]),
+  compacidad = (dataset[, c(8)]),
+  concavidad = (dataset[, c(9)]),
+  puntos_concavos = (dataset[, c(10)]),
+  simetria = (dataset[, c(11)]),
+  dimension_fractal = (dataset[, c(12)])
 )
 #Normalización de datos y eliminacion de datos numericos 
 
