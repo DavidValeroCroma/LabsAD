@@ -122,7 +122,19 @@ kmedoids_result <- pam(pca_scores, k = num_clusters)
 pca_scores$cluster <- as.factor(kmedoids_result$cluster)
 # # Visualizar los clusters en el espacio PCA
 
-ggplot(pca_scores, aes(x = PC1, y = PC2, color = Diagnosis, shape = cluster)) +
+# ggplot(pca_scores, aes(x = PC1, y = PC2, color = Diagnosis, shape = cluster)) +
+#   geom_point(size = 3) +
+#   scale_color_manual(values = c("blue", "green"), labels = c("Benigno", "Maligno")) +
+#   scale_shape_manual(values = c(16, 17)) +  # Diferentes símbolos para cada cluster
+#   labs(title = "Biplot de PCA: Clasificación Benigno/Maligno con Clusters",
+#        x = "Componente Principal 1",
+#        y = "Componente Principal 2",
+#        color = "Diagnóstico",
+#        shape = "Cluster") +
+#   stat_ellipse(aes(group = cluster), type = "norm", linetype = 2) +  # Añade elipses para los clusters
+#   theme_minimal()
+
+ggplot(pca_scores, aes(x = PC1, y = PC2, shape = cluster)) +
   geom_point(size = 3) +
   scale_color_manual(values = c("blue", "green"), labels = c("Benigno", "Maligno")) +
   scale_shape_manual(values = c(16, 17)) +  # Diferentes símbolos para cada cluster
