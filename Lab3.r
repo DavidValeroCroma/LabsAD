@@ -30,7 +30,10 @@ if (anyNA(datos)) {
 
 ## Discretización de variables numéricas (por ejemplo, radius1)
 datos$radius1 <- discretize(datos$radius1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-
+datos$perimeter1 <- discretize(datos$perimeter1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$area1 <- discretize(datos$area1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$smoothness1 <- discretize(datos$smoothness1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$concave_points1 <- discretize(datos$concave_points1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 ## Conversión de Diagnosis a factor
 datos$Diagnosis <- as.factor(datos$Diagnosis)
 
@@ -50,7 +53,7 @@ reglas <- apriori(transacciones, parameter = list(supp = 0.05, conf = 0.8, maxle
 summary(reglas)
 
 #7 Filtrar Reglas Relevantes
-reglas_filtradas <- subset(reglas, lift > 2.5 & confidence > 0.9184 & support > 0.09095)
+reglas_filtradas <- subset(reglas, lift > 2.5 & confidence > 0.9417 & support > 0.10401)
 inspect(head(reglas_filtradas, 10))  # Inspeccionar las primeras 10 reglas relevantes
 ## Visualizar las 10 reglas principales ordenadas por lift
 inspect(head(sort(reglas, by = "lift"), 10))
