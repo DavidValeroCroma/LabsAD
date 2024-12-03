@@ -18,6 +18,9 @@ summary(datos)  # Resumen estadístico de las columnas
 ## Eliminar columna ID porque no aporta al análisis
 datos$Id <- NULL
 
+## Eliminar columnas con sufijos '2' y '3'
+datos <- datos[, !grepl("(2|3)$", names(datos))]
+
 ## Verificar valores NA
 if (anyNA(datos)) {
   print("Existen valores NA en el dataset. Revisa los datos.")
@@ -47,7 +50,7 @@ reglas <- apriori(transacciones, parameter = list(supp = 0.05, conf = 0.8, maxle
 summary(reglas)
 
 #7 Filtrar Reglas Relevantes
-reglas_filtradas <- subset(reglas, lift > 2.5 & confidence > 0.9)
+reglas_filtradas <- subset(reglas, lift > 2.5 & confidence > 0.9184 & support > 0.09095)
 inspect(head(reglas_filtradas, 10))  # Inspeccionar las primeras 10 reglas relevantes
 ## Visualizar las 10 reglas principales ordenadas por lift
 inspect(head(sort(reglas, by = "lift"), 10))
