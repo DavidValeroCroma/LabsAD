@@ -40,16 +40,7 @@ datos$compactness1 <- discretize(datos$compactness1, method = "frequency", break
 datos$concavity1 <- discretize(datos$concavity1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 datos$symmetry1 <- discretize(datos$symmetry1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 datos$fractal_dimension1  <- discretize(datos$fractal_dimension1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$radius2 <- discretize(datos$radius2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$perimeter2 <- discretize(datos$perimeter2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$area2 <- discretize(datos$area2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$smoothness2 <- discretize(datos$smoothness2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$concave_points2 <- discretize(datos$concave_points2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$texture2 <- discretize(datos$texture2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$compactness2 <- discretize(datos$compactness2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$concavity2 <- discretize(datos$concavity2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$symmetry2 <- discretize(datos$symmetry2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-#datos$fractal_dimension2  <- discretize(datos$fractal_dimension2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+
 # 4.1 Transformación a una Matriz Esparza
 
 ## Conversión de Diagnosis a factor
@@ -82,6 +73,7 @@ inspect(head(sort(reglas, by = "lift"), 10))
 # Filtrar reglas donde el consecuente es 'Diagnosis=M' o 'Diagnosis=B'
 reglas_filtradas <- subset(reglas, rhs %pin% "Diagnosis=")
 
+reglas_filtradas <- reglas_filtradas[!is.redundant(reglas_filtradas)]
 # Inspección inicial de las reglas filtradas
 summary(reglas_filtradas)
 inspect(head(sort(reglas_filtradas, by = "lift"), 10))
@@ -98,10 +90,8 @@ inspect(head(reglas_filtradas, 10))  # Inspeccionar las primeras 10 reglas relev
 inspect(head(sort(reglas_filtradas, by = "lift"), 10))
 
 # Si aún hay muchas reglas, limitar a las 100 principales por lift
-reglas_top <- head(sort(reglas_filtradas, by = "lift"), 100)
-
-reglas_top <- head(sort(reglas_top, by = "confidence"), 49)
-
+reglas_top <- head(sort(reglas_filtradas, by = "lift"), 10)
+inspect(reglas_top)
 reglas_top <- head(sort(reglas_top, by = "support"), 10)
 inspect(reglas_top)
 # Guardar las reglas filtradas en un archivo

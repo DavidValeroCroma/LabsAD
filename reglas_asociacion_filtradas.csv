@@ -1,11 +1,11 @@
 "rules","support","confidence","coverage","lift","count"
-"{texture1=Alto,perimeter1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.149384885764499,1,0.149384885764499,2.68396226415094,85
-"{radius1=Alto,texture1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.144112478031634,1,0.144112478031634,2.68396226415094,82
-"{radius1=Alto,texture1=Alto,perimeter1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.144112478031634,1,0.144112478031634,2.68396226415094,82
-"{texture1=Alto,area1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.142355008787346,1,0.142355008787346,2.68396226415094,81
-"{texture1=Alto,perimeter1=Alto,area1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.142355008787346,1,0.142355008787346,2.68396226415094,81
-"{radius1=Alto,texture1=Alto,area1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.142355008787346,1,0.142355008787346,2.68396226415094,81
-"{radius1=Alto,texture1=Alto,perimeter1=Alto,area1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.142355008787346,1,0.142355008787346,2.68396226415094,81
-"{radius1=Alto,texture1=Alto,concavity1=Alto} => {Diagnosis=M}",0.140597539543058,1,0.140597539543058,2.68396226415094,80
-"{texture1=Alto,perimeter1=Alto,concavity1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.140597539543058,1,0.140597539543058,2.68396226415094,80
-"{radius1=Alto,texture1=Alto,perimeter1=Alto,concavity1=Alto} => {Diagnosis=M}",0.140597539543058,1,0.140597539543058,2.68396226415094,80
+"{perimeter1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.261862917398946,0.961290322580645,0.272407732864675,2.58006695069994,149
+"{radius1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.256590509666081,0.973333333333333,0.263620386643234,2.61238993710692,146
+"{area1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.254833040421793,0.973154362416107,0.261862917398946,2.6119095859187,145
+"{perimeter1=Alto,concavity1=Alto} => {Diagnosis=M}",0.246045694200351,0.96551724137931,0.254833040421793,2.59141184124919,140
+"{radius1=Alto,concavity1=Alto} => {Diagnosis=M}",0.240773286467487,0.985611510791367,0.244288224956063,2.64534410207683,137
+"{perimeter1=Alto,concavity1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.240773286467487,0.971631205673759,0.24780316344464,2.60782149069985,137
+"{area1=Alto,concavity1=Alto} => {Diagnosis=M}",0.239015817223199,0.985507246376812,0.242530755711775,2.64506426032267,136
+"{radius1=Alto,compactness1=Alto} => {Diagnosis=M}",0.200351493848858,0.957983193277311,0.209138840070299,2.57119074044712,114
+"{radius1=Alto,compactness1=Alto,concave_points1=Alto} => {Diagnosis=M}",0.198594024604569,0.974137931034483,0.203866432337434,2.61454944697463,113
+"{area1=Alto,compactness1=Alto} => {Diagnosis=M}",0.198594024604569,0.957627118644068,0.207381370826011,2.57023504956828,113
