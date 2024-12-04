@@ -34,12 +34,70 @@ datos$perimeter1 <- discretize(datos$perimeter1, method = "frequency", breaks = 
 datos$area1 <- discretize(datos$area1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 datos$smoothness1 <- discretize(datos$smoothness1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 datos$concave_points1 <- discretize(datos$concave_points1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$texture1 <- discretize(datos$texture1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$compactness1 <- discretize(datos$compactness1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$concavity1 <- discretize(datos$concavity1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$symmetry1 <- discretize(datos$symmetry1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+datos$fractal_dimension1  <- discretize(datos$fractal_dimension1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+
+# 4.1 Transformación a una Matriz Esparza
+
 ## Conversión de Diagnosis a factor
 datos$Diagnosis <- as.factor(datos$Diagnosis)
+
+# Convierte todas las columnas a factores (si no lo están ya)
+datos[] <- lapply(datos, function(x) if (is.character(x) || is.factor(x)) as.factor(x) else x)
 
 # 5. Conversión a transacciones
 transacciones <- as(datos, "transactions")
 
+# Inspección de las transacciones
+summary(transacciones)
+inspect(head(transacciones, 5))
+
+# 6. Aplicación de Reglas de Asociación (Algoritmo Apriori)
+
+# Parámetros mínimos para generar reglas
+soporte_min <- 0.01
+confianza_min <- 0.5
+
+# Generar las reglas usando el algoritmo Apriori
+reglas <- apriori(transacciones, 
+                  parameter = list(supp = soporte_min, conf = confianza_min, target = "rules"))
+
+# Inspección inicial de las reglas generadas
+summary(reglas)
+inspect(head(sort(reglas, by = "lift"), 10))
+
+# Filtrar reglas donde el consecuente es 'Diagnosis=M' o 'Diagnosis=B'
+reglas_filtradas <- subset(reglas, rhs %pin% "Diagnosis=")
+
+# Inspección inicial de las reglas filtradas
+summary(reglas_filtradas)
+inspect(head(sort(reglas_filtradas, by = "lift"), 10))
+
+# 7.- Visualización de las reglas filtradas
+plot(reglas_filtradas, method = "grouped")
+plot(reglas_filtradas, method = "graph", engine = "htmlwidget")
+
+# Guardar las reglas filtradas en un archivo
+write(reglas_filtradas, file = "reglas_asociacion_filtradas.csv", sep = ",", quote = TRUE, row.names = FALSE)
+
+#8.- Filtrar Reglas Relevantes
+reglas_filtradas <- subset(reglas_filtradas, lift > 2.5 & confidence > 0.9417 & support > 0.10401)
+inspect(head(reglas_filtradas, 10))  # Inspeccionar las primeras 10 reglas relevantes
+## Visualizar las 10 reglas principales ordenadas por lift
+inspect(head(sort(reglas_filtradas, by = "lift"), 10))
+
+# Si aún hay muchas reglas, limitar a las 100 principales por lift
+reglas_top <- head(sort(reglas_filtradas, by = "lift"), 100)
+inspect(reglas_top)
+
+# 9.- Graficos
+plot(reglas_top, method = "grouped")
+plot(reglas_top, method = "graph", engine = "htmlwidget")
+
+#----------------------------------------------------------------------------------------------
 # Inspección del formato transaccional
 summary(transacciones)
 inspect(head(transacciones))
