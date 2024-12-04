@@ -4,6 +4,7 @@ install.packages("arulesViz")
 library(arules)
 library(arulesViz)
 
+
 # 2. Cargar los Datos
 ruta_archivo <- "wdbc.csv"  # Cambia esta ruta a donde se encuentre tu archivo CSV
 datos <- read.csv(ruta_archivo)
@@ -39,7 +40,16 @@ datos$compactness1 <- discretize(datos$compactness1, method = "frequency", break
 datos$concavity1 <- discretize(datos$concavity1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 datos$symmetry1 <- discretize(datos$symmetry1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 datos$fractal_dimension1  <- discretize(datos$fractal_dimension1, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
-
+#datos$radius2 <- discretize(datos$radius2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$perimeter2 <- discretize(datos$perimeter2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$area2 <- discretize(datos$area2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$smoothness2 <- discretize(datos$smoothness2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$concave_points2 <- discretize(datos$concave_points2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$texture2 <- discretize(datos$texture2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$compactness2 <- discretize(datos$compactness2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$concavity2 <- discretize(datos$concavity2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$symmetry2 <- discretize(datos$symmetry2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
+#datos$fractal_dimension2  <- discretize(datos$fractal_dimension2, method = "frequency", breaks = 3, labels = c("Bajo", "Medio", "Alto"))
 # 4.1 Transformación a una Matriz Esparza
 
 ## Conversión de Diagnosis a factor
@@ -58,8 +68,8 @@ inspect(head(transacciones, 5))
 # 6. Aplicación de Reglas de Asociación (Algoritmo Apriori)
 
 # Parámetros mínimos para generar reglas
-soporte_min <- 0.01
-confianza_min <- 0.5
+soporte_min <- 0.05
+confianza_min <- 0.95
 
 # Generar las reglas usando el algoritmo Apriori
 reglas <- apriori(transacciones, 
@@ -80,21 +90,24 @@ inspect(head(sort(reglas_filtradas, by = "lift"), 10))
 plot(reglas_filtradas, method = "grouped")
 plot(reglas_filtradas, method = "graph", engine = "htmlwidget")
 
-# Guardar las reglas filtradas en un archivo
-write(reglas_filtradas, file = "reglas_asociacion_filtradas.csv", sep = ",", quote = TRUE, row.names = FALSE)
 
-#8.- Filtrar Reglas Relevantes
-reglas_filtradas <- subset(reglas_filtradas, lift > 2.5 & confidence > 0.9417 & support > 0.10401)
+#8.- Filtrar Reglas más Relevantes
+reglas_filtradas <- subset(reglas_filtradas, lift > 2.5 & confidence > 0.95 & support > 0.1)
 inspect(head(reglas_filtradas, 10))  # Inspeccionar las primeras 10 reglas relevantes
 ## Visualizar las 10 reglas principales ordenadas por lift
 inspect(head(sort(reglas_filtradas, by = "lift"), 10))
 
 # Si aún hay muchas reglas, limitar a las 100 principales por lift
 reglas_top <- head(sort(reglas_filtradas, by = "lift"), 100)
-inspect(reglas_top)
 
+reglas_top <- head(sort(reglas_top, by = "confidence"), 49)
+
+reglas_top <- head(sort(reglas_top, by = "support"), 10)
+inspect(reglas_top)
+# Guardar las reglas filtradas en un archivo
+write(reglas_top, file = "reglas_asociacion_filtradas.csv", sep = ",", quote = TRUE, row.names = FALSE)
 # 9.- Graficos
-plot(reglas_top, method = "grouped")
+#plot(reglas_top, method = "grouped")
 plot(reglas_top, method = "graph", engine = "htmlwidget")
 
 #----------------------------------------------------------------------------------------------
